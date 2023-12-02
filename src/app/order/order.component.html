@@ -1,0 +1,31 @@
+<!-- <p>order works!</p> -->
+<div class="view-container d-flex flex-wrap justify-content-around align-item-between">
+    <div *ngFor="let item of myOrderData" class="Container">
+        <div class="productContainer mt-4">
+            <div class="img-Container">
+                <img [src]="item.imgUrl" alt="..." style="width: 100%;height: 100%;">
+            </div>
+            <div class="detail-container">
+                <span>
+                    <p style="text-align: center;">Product Name : <b>{{item.productName}}</b></p>
+                </span>
+                <span>
+                    <p style="text-align: center;">Product Price : <b>₹ {{item.productprice }}</b></p>
+                </span>
+                <span>
+                    <p style="text-align: center;">Qty : <b>{{item.QtyofProduct }}</b></p>
+                </span>
+                <span>
+                    <p style="text-align: center;">Delivery Date : <b>{{item.deliveryDate | date: 'dd/MM/yyyy'}}</b></p>
+                </span>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <p><b>Name : </b>{{item.name}}</p>
+            <p><b>Contact : </b>{{item.contact}}</p>
+            <p><b>Order Date : </b>{{item.orderDate  | date: 'dd/MM/yyyy'}}</p>
+            <p><b>Address : </b>{{item.houseNO}}{{item.street}}{{item.city}}{{item.state}}-{{item.pincode}}</p>
+
+        </div>
+    </div>
+</div>

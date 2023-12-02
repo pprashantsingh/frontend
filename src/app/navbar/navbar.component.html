@@ -1,0 +1,115 @@
+
+    <div class="navbar-outer-container  handle">
+        <div class="navbar-inner-container">
+            <div class="burger-logo">
+                <div class="pt-2">
+                    <a routerLink="/view" class="logo">
+                        <span>Indian</span>
+                        <span>Market</span>
+                    </a>
+                </div>
+                <div class="handle-icon" (click)="handleResponsive()">
+                    <i class="fa-solid fa-2x fa-bars"></i>
+                </div>
+            </div>
+            <div class="left-container">
+                <div class="search">
+                    <input type="text" name="" id="" placeholder="Search here..." (keyup)="getKey($event)">
+                    <div><i class="fa-solid mySearch fa-magnifying-glass search-icon" (click)="focusSearch()"></i></div>
+                </div>
+            </div>
+            <div class="right-container">
+                <div class="cart">
+                    <i style="cursor: pointer;" class="bi bi-cart4"><svg xmlns="http://www.w3.org/2000/svg" width="30"
+                            height="30" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                            <path
+                                d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                        </svg></i>                
+                    <p class="cart-count" *ngIf="totalcartItem>0" >{{totalcartItem}}</p>
+                    <p class="cart-count" *ngIf="totalcartItem==0">0</p>
+                    <span class="ps-2" style="font-weight: bold; cursor: pointer;" (click)="chechLoggedInCart()">Cart</span>
+                </div>
+                <div class="myorder">
+                    <span>
+                        <i class="fas fa-border-all fa-xl"></i>
+                    </span>
+                   <span class="ps-2" style="font-weight: bold;" (click)="chechLoggedInBuyNow()">My Order</span>
+    
+                </div>
+                <div class="profile">
+                    <span><i class="fa-regular fa-xl fa-user" (click)="chechLoggedInProfile()"></i></span>
+                    <span class="ps-2" style="font-weight: bold;color: rgb(42, 41, 41);" (click)="chechLoggedInProfile()">{{userName | uppercase}}</span>
+                </div>
+                <div class="profile">
+                    <span class="ps-2" style="font-weight: bold;" data-bs-toggle="modal" data-bs-target="#login" *ngIf="toggleshowhide">LogIn</span>
+                    <span class="ps-2" style="font-weight: bold;" (click)="Logout()" *ngIf="!toggleshowhide">LogOut</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal  fade" id="register" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md hellow" style="z-index: 999999;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Registration Form</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetAll()"></button>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="modal-body">
+                        <form [formGroup]="register">
+                            <div class="mb-3">
+                                <label for="Username" class="form-label">User Name</label>
+                                <input type="text" class="form-control" id="Username" formControlName="userName">
+                                <span class="text-danger" *ngIf="(register['controls']['userName'].touched || submitted) && register['controls']['userName'].errors?.['required']">This filled is required</span>                        </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" formControlName="email">
+                                <span class="text-danger" *ngIf="(register['controls']['email'].touched || submitted) && register['controls']['email'].errors?.['required']">Email is required</span>
+                                <span class="text-danger" *ngIf="register['controls']['email'].errors?.['pattern']">Please provide a valid email address</span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Contactnumber" class="form-label">Contact Number</label>
+                                <input type="number" class="form-control" id="Contactnumber" formControlName="contactNumber">
+                                <span class="text-danger" *ngIf="(register['controls']['contactNumber'].touched || submitted) && register['controls']['contactNumber'].errors?.['required']">This filled is required</span> 
+                                <span class="text-danger" *ngIf="register['controls']['contactNumber'].errors?.['pattern']">Enter valid contact number</span>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" (click)="AddProfiledata()">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="modal  fade" id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md hellow" style="z-index: 999999;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Login Form</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  (click)="resetAll2()"></button>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="modal-body">
+                        <form [formGroup]="loginUser">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" formControlName="email">
+                                <span class="text-danger" *ngIf="(loginUser['controls']['email'].touched || submitted2) && loginUser['controls']['email'].errors?.['required']">email is required</span>
+                                <span class="text-danger" *ngIf="loginUser['controls']['email'].errors?.['pattern']">Please provide a valid email address</span>
+                            </div>
+                        </form>
+    
+                        <div class="text-center">
+                            <span style="color: blue; text-decoration: underline; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#register" data-bs-dismiss="modal" aria-label="Close" >If you not registerd then click here...</span>
+                            <button type="button" class="btn btn-success ms-5"   (click)="login()">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

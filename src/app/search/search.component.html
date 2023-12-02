@@ -1,0 +1,200 @@
+<button routerLink="/view" class="btn btn-outline-primary mt-3 ms-3">Home</button>
+<div *ngIf="handleBuyNow">
+    <div class="view-container d-flex flex-wrap justify-content-around align-item-between" style="padding: 45px;">
+        <div class="card mb-5" style="width: 20rem;cursor: pointer; box-shadow: 15px 15px 20px 0px #aaa;"
+            *ngFor="let item of productArr">
+            <img [src]="item.imgUrl" class="card-img-top" alt="...">
+            <div class="card-body">
+                <span *ngIf="item.productStorage">
+                    <p><b>{{item.productName }}</b>&nbsp;({{item.productStorage}})</p>
+                </span>
+                <span *ngIf="item.productStorage==''">
+                    <p><b>{{item.productName }}</b></p>
+                </span>
+                <p style="line-height: 0%;"><b>&#8377; </b> {{item.productPrice}}</p>
+                <p *ngIf="item.NumberOfProduct==1" style="color: red">Hurry up Only one product are left</p>
+                <p *ngIf="item.NumberOfProduct==0" style="color: red">Out of Stock</p>
+
+                <h3 *ngIf="item.NumberOfProduct==0; then ifBlock else elseBlock"></h3>
+                <ng-template #ifBlock>
+                    <button class="btn btn-success mt-3 me-3" [disabled]="true"
+                        (click)="chechLoggedInBuyNow(item)">BuyNow</button>
+                </ng-template>
+                <ng-template #elseBlock>
+                    <button class="btn btn-success mt-3 me-3" [disabled]="false"
+                        (click)="chechLoggedInBuyNow(item)">BuyNow</button>
+                </ng-template>
+
+                <button class="btn btn-primary mt-3" (click)="addProductToCart(item._id)">Add to Cart</button>
+                <div class="mt-3" style="color: blue;">
+                    <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#detail"
+                        style="text-decoration: none;" (click)="getdetail(item)">Detail</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <mat-paginator style="margin: auto;" (page)="onPageChange($event)" [length]="totalProductArr.length"
+            [pageSize]="defaultRecords" [pageSizeOptions]="[8, 20, 25, 100]">
+        </mat-paginator> -->
+    </div>
+</div>
+
+<div *ngIf="basicDetail" class="mt-5">
+    <div class="productContainer">
+        <div class="img-Container">
+            <img [src]="getSingleData.imgUrl" alt="..." style="width: 100%;height: 100%;">
+        </div>
+        <div class="detail-container">
+            <div class="detail">
+                <span *ngIf="getSingleData.productStorage">
+                    <p style="text-align: center;"><b>{{getSingleData.productName
+                            }}</b>({{getSingleData.productStorage}})</p>
+                </span>
+                <span *ngIf="getSingleData.productStorage==''">
+                    <p style="text-align: center;"><b>{{getSingleData.productName }}</b></p>
+                </span>
+                <p style="text-align: center;"><b>&#8377; {{productprice}}</b></p>
+
+                <div style="display: flex; padding-bottom: 10px;">
+                    <div style="padding-top: 6px; padding-right: 10px;"><strong>Qty : </strong></div>
+                    <div class="btn-group text-center" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-danger" (click)="decrease()">-</button>
+                        <button type="button" class="btn btn-warning">{{quantity}}</button>
+                        <button type="button" class="btn btn-success"
+                            (click)="increase(getSingleData.NumberOfProduct)">+</button>
+                    </div>
+                </div>
+                <span style="color:green;" class="text-center"><b>Date of Delivery : {{currentDate | date:
+                        'dd/MM/yyyy'}}</b></span>
+                <!-- <span *ngIf="defaultDate" style="color:green;" class="text-center"><b>Date of Delivery : {{currentDate | date: 'dd/MM/yyyy'}}</b></span> -->
+            </div>
+        </div>
+    </div>
+
+    <div style="max-width: 750px; margin:40px auto;">
+        <form class="example-form" [formGroup]="buyNowForm">
+            <div>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                    <mat-label>Name</mat-label>
+                    <input type="text" matInput formControlName="name" required>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                    <mat-label>Contact</mat-label>
+                    <input type="number" formControlName="contact" matInput required>
+                </mat-form-field>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 49%;">
+                    <mat-label>House No.</mat-label>
+                    <input type="text" matInput formControlName="houseNO" placeholder="Ex. 636/06" required>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 49%;">
+                    <mat-label>Street/NearBy</mat-label>
+                    <input type="text" formControlName="street" matInput required>
+                </mat-form-field>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 32%;">
+                    <mat-label>Pincode</mat-label>
+                    <input type="number" formControlName="pincode" matInput required
+                        (change)="checkPincode($event.target.value)">
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 32%;">
+                    <mat-label>City</mat-label>
+                    <input type="text" formControlName="city" [value]="buyNowForm.value.city" matInput>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 32%;">
+                    <mat-label>State</mat-label>
+                    <input type="text" formControlName="state" [value]="buyNowForm.value.state" matInput>
+                </mat-form-field>
+            </div>
+
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-primary mt-3" (click)="goViewPage()">Back</button>
+                <button type="submit" class="btn btn-warning ms-3 mt-3" (click)="next('1')">Continue</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+<div *ngIf="paymentMOde" class="mt-5">
+
+
+    <div style="width: 600px; margin:40px auto;">
+        <div class="text-center" style="margin-top: 250px;">
+            <h3 class="mb-4"><strong> Select Payment Mode here...</strong></h3>
+            <!-- <form [formGroup]="paymentModeForm"> -->
+            <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1" (click)="getValue('1','UPI')">UPI</mat-radio-button>
+                <mat-radio-button value="2" (click)="getValue('2','COD')">Cash On Delivery</mat-radio-button>
+            </mat-radio-group>
+            <!-- </form> -->
+        </div>
+
+
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-outline-primary mt-3" (click)="Privious('1')">Privious</button>
+            <button type="button" class="btn btn-warning ms-3 mt-3" *ngIf="toggleOrderButton_1"
+                (click)="next('2')">Continue</button>
+            <button type="button" class="btn btn-warning ms-3 mt-3" *ngIf="toggleOrderButton_2"
+                (click)="orderProduct()">Place Order</button>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="DoPayment" class="mt-5">
+    <div style="width: 600px; margin:40px auto;">
+        <div class="text-center" style="margin-top: 250px;">
+            <h3 class="mb-4"><strong> Select Mode here...</strong></h3>
+            <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="3">Paytm</mat-radio-button>
+                <mat-radio-button value="4">Google Pay</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-outline-primary mt-3" (click)="Privious()">Privious</button>
+            <button type="button" class="btn btn-warning ms-3 mt-3">Payment</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal  fade" id="detail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg hellow" style="z-index: 999999;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Other Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="modal-body" *ngFor="let item of detailObj | keyvalue">
+                    <p style="line-height: 0%;">
+                        <b>{{item.key}} : </b>{{item.value}}
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true">
+    <p style="color: white"> Loading... </p>
+</ngx-spinner>

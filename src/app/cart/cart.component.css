@@ -1,0 +1,32 @@
+.card-body {
+    text-align: center;
+}
+
+.productContainer {
+    max-width: 750px;
+    height: 230px;
+    display: flex;
+    margin: auto;
+    box-shadow: 10px 5px 20px 0px #aaa;
+}
+
+.img-Container {
+    width: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.detail-container {
+    width: 50%;
+    padding-top: 15px;
+    position: relative;
+}
+.detail{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }

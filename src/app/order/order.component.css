@@ -1,0 +1,23 @@
+.Container {
+    max-width: 50%;
+     /* box-shadow: 10px 5px 20px 0px #aaa; */
+}
+.productContainer {
+    max-width: 520px;
+    height: 150px;
+    display: flex;
+    margin-left: 20px;
+   
+}
+
+.img-Container {
+    width: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.detail-container {
+    width: 50%;
+    padding-top: 15px;
+    position: relative;
+}
