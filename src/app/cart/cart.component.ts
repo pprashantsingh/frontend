@@ -275,6 +275,7 @@ export class CartComponent implements OnInit {
   totalcartItem
   cartcount() {
     this.cartService.UserCartData().subscribe((res) => {
+      console.log(res)
       if (res.totalCartItem > 0) {
         this.totalcartItem = res.totalCartItem
         this.cartService.cartcount.next(this.totalcartItem)
